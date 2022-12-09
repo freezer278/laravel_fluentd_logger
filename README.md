@@ -1,28 +1,17 @@
 # vmorozov/laravel_fluentd_logger
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/:vendor_slug/:package_slug/run-tests?label=tests)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/:vendor_slug/:package_slug/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/vmorozov/laravel_fluentd_logger.svg?style=flat-square)](https://packagist.org/packages/vmorozov/laravel_fluentd_logger)
+[![Total Downloads](https://img.shields.io/packagist/dt/vmorozov/laravel_fluentd_logger.svg?style=flat-square)](https://packagist.org/packages/vmorozov/laravel_fluentd_logger)
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+[comment]: <> ([![GitHub Tests Action Status]&#40;https://img.shields.io/github/workflow/status/vmorozov/laravel_fluentd_logger/run-tests?label=tests&#41;]&#40;https://github.com/vmorozov/laravel_fluentd_logger/actions?query=workflow%3Arun-tests+branch%3Amain&#41;)
 
-## Support us
+[comment]: <> ([![GitHub Code Style Action Status]&#40;https://img.shields.io/github/workflow/status/vmorozov/laravel_fluentd_logger/Fix%20PHP%20code%20style%20issues?label=code%20style&#41;]&#40;https://github.com/vmorozov/laravel_fluentd_logger/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain&#41;)
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+This package provides ability to use fluentd as log driver. It also add additional logging capabilities such as:
+- Request log
+- DB Query log
+- Queue Jobs log
+- Log tracing
 
 ## Installation
 
@@ -38,18 +27,29 @@ You can publish the config file with:
 php artisan vendor:publish --tag="laravel_fluentd_logger-config"
 ```
 
-This is the contents of the published config file:
-
+Add middlewares to `app/Http/Kernel.php`:
 ```php
-return [
+protected $middleware = [
+    // ... other middlewares here
+    \Vmorozov\LaravelFluentdLogger\Middleware\LogRequestMiddleware::class,
+    \Vmorozov\LaravelFluentdLogger\Middleware\ContinueTraceMiddleware::class,
 ];
 ```
 
-## Usage
-
+Add fluentd log channel to `config/logging.php`:
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+// ...some exisiting channels
+
+'fluentd' => [
+    'driver' => 'fluentd',
+    'level' => env('LOG_LEVEL', 'debug'),
+],
+```
+
+Add ENV vars with fluentd configs:
+```dotenv
+FLUENTD_HOST=127.0.0.1
+FLUENTD_PORT=24224
 ```
 
 ## Testing
@@ -58,21 +58,9 @@ echo $variable->echoPhrase('Hello, VendorName!');
 composer test
 ```
 
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Vladimir Morozov](https://github.com/freezer278)
 - [All Contributors](../../contributors)
 
 ## License

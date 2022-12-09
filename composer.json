@@ -1,14 +1,15 @@
 {
     "name": "vmorozov/laravel_fluentd_logger",
-    "description": "Provides ability to use fluentd as log driver",
+    "description": "Provides ability to use fluentd as log driver.",
     "keywords": [
         "logs",
         "advanced logging",
         "laravel",
         "tracing",
+        "log tracing",
         "debugging",
-        "request logs",
-        "db query logs",
+        "request log",
+        "db query log",
         "fluentd",
         "EFK Stack",
         "ELK Stack"
