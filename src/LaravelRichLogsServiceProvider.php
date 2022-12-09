@@ -38,11 +38,6 @@ class LaravelRichLogsServiceProvider extends PackageServiceProvider
         $action = $this->app->make(MakeQueueTraceAwareAction::class);
         $action->execute();
 
-//        Log::withContext([
-//            'trace_id' => $traceIdStorage->getTraceId(),
-//            'env' => env('APP_ENV'),
-//        ]);
-
         Queue::failing(function (JobFailed $event) {
             Log::error($event->exception->getMessage(), [
                 'connection_name' => $event->connectionName,
