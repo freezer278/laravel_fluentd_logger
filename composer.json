@@ -1,10 +1,13 @@
 {
-    "name": ":vendor_slug/:package_slug",
+    "name": "vmorozov/laravel_rich_logs",
     "description": ":package_description",
     "keywords": [
-        ":vendor_name",
+        "logs",
         "laravel",
-        ":package_slug"
+        "tracing",
+        "debugging",
+        "request logs",
+        "db query logs"
     ],
     "homepage": "https://github.com/:vendor_slug/:package_slug",
     "license": "MIT",
@@ -35,13 +38,12 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Vmorozov\\LaravelRichLogs\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Vmorozov\\LaravelRichLogs\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -61,11 +63,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
-            ],
-            "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
-            }
+                "Vmorozov\\LaravelRichLogs\\LaravelRichLogsServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",
