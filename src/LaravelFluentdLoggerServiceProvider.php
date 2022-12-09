@@ -56,7 +56,7 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
                 'queue' => $event->job->getQueue(),
                 'job_name' => $event->job->resolveName(),
                 'attempts' => $event->job->attempts(),
-                //                'job_payload' => $event->job->getRawBody(),
+                // 'job_payload' => $event->job->getRawBody(),
             ]);
         });
     }
@@ -68,7 +68,7 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
                 'DB Query',
                 [
                     'query' => $query->sql,
-                    'bindings' => $query->bindings,
+//                    'bindings' => $query->bindings,
                     'time' => $query->time,
                     'connection' => $query->connectionName,
                 ]
