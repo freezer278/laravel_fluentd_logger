@@ -1,13 +1,17 @@
 {
     "name": "vmorozov/laravel_fluentd_logger",
-    "description": ":package_description",
+    "description": "Provides ability to use fluentd as log driver",
     "keywords": [
         "logs",
+        "advanced logging",
         "laravel",
         "tracing",
         "debugging",
         "request logs",
-        "db query logs"
+        "db query logs",
+        "fluentd",
+        "EFK Stack",
+        "ELK Stack"
     ],
     "homepage": "https://github.com/:vendor_slug/:package_slug",
     "license": "MIT",
@@ -65,7 +69,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Vmorozov\\LaravelFluentdLogger\\LaravelRichLogsServiceProvider"
+                "Vmorozov\\LaravelFluentdLogger\\LaravelFluentdLoggerServiceProvider"
             ]
         }
     },

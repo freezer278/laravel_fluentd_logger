@@ -14,21 +14,22 @@ use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdGenerator;
 use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdStorage;
 use Psr\Log\LoggerInterface;
 
-class LaravelRichLogsServiceProvider extends PackageServiceProvider
+class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
         $package
             ->name('laravel_fluentd_logger')
             ->hasConfigFile();
     }
 
     public function bootingPackage()
+    {
+        $this->initTracing();
+        $this->registerLogDriver();
+    }
+
+    private function initTracing()
     {
         $traceId = (new TraceIdGenerator())->generateTraceId();
 
@@ -40,17 +41,26 @@ class LaravelRichLogsServiceProvider extends PackageServiceProvider
         $action = $this->app->make(MakeQueueTraceAwareAction::class);
         $action->execute();
 
+        $this->initQueueJobsFailsLog();
+        $this->initDbQueryLog();
+    }
+
+    private function initQueueJobsFailsLog()
+    {
         Queue::failing(function (JobFailed $event) {
-            Log::error($event->exception->getMessage(), [
+            Log::error('Failed Job | ' . $event->job->resolveName(), [
+                'exception' => $event->exception,
                 'connection_name' => $event->connectionName,
                 'queue' => $event->job->getQueue(),
-                'job_name' => $event->job->getName(),
+                'job_name' => $event->job->resolveName(),
+                'attempts' => $event->job->attempts(),
                 //                'job_payload' => $event->job->getRawBody(),
-                'file' => $event->exception->getFile().':'.$event->exception->getLine(),
-                'exception_trace' => $event->exception->getTraceAsString(),
             ]);
         });
+    }
 
+    private function initDbQueryLog()
+    {
         DB::listen(function ($query) {
             Log::info(
                 'DB Query',
@@ -62,8 +72,6 @@ class LaravelRichLogsServiceProvider extends PackageServiceProvider
                 ]
             );
         });
-
-        $this->registerLogDriver();
     }
 
     private function registerLogDriver()

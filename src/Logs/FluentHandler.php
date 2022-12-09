@@ -31,19 +31,20 @@ class FluentHandler extends AbstractProcessingHandler
 
     /**
      * @param LoggerInterface $logger
-     * @param null|string     $tagFormat
-     * @param int             $level
-     * @param bool            $bubble
+     * @param null|string $tagFormat
+     * @param int $level
+     * @param bool $bubble
      *
      * @phpstan-param Level $level
      */
     public function __construct(
         LoggerInterface $logger,
-        Application $application,
-        string $tagFormat = null,
-        int $level = Logger::DEBUG,
-        bool $bubble = true
-    ) {
+        Application     $application,
+        string          $tagFormat = null,
+        int             $level = Logger::DEBUG,
+        bool            $bubble = true
+    )
+    {
         $this->logger = $logger;
         if ($tagFormat !== null) {
             $this->tagFormat = $tagFormat;
@@ -62,12 +63,12 @@ class FluentHandler extends AbstractProcessingHandler
         $this->logger->post(
             $tag,
             [
-                'trace_id' => $this->traceIdStorage->getTraceId(),
-                'level' => $record['level_name'],
-                'env' => $record['channel'],
-                'message' => $record['message'],
-                'context' => $this->getContext($record['context']),
-                'extra'   => $record['extra'],
+                '@trace_id' => $this->traceIdStorage->getTraceId(),
+                '@level' => $record['level_name'],
+                '@env' => $record['channel'],
+                '@message' => $record['message'],
+                '@context' => $this->getContext($record['context']),
+                '@extra' => $record['extra'],
             ]
         );
     }
@@ -84,7 +85,7 @@ class FluentHandler extends AbstractProcessingHandler
     }
 
     /**
-     * @param array<string, mixed>  $record
+     * @param array<string, mixed> $record
      * @param string $tag
      *
      * @return string
@@ -122,7 +123,7 @@ class FluentHandler extends AbstractProcessingHandler
     /**
      * Identifies the content type of the given $context
      *
-     * @param  mixed $context
+     * @param mixed $context
      *
      * @return bool
      */
@@ -138,14 +139,19 @@ class FluentHandler extends AbstractProcessingHandler
     /**
      * Returns the entire exception trace as a string
      *
-     * @param  array<string, mixed> $context
-
+     * @param array<string, mixed> $context
      * @return string
      */
     protected function getContextExceptionTrace(array $context): array
     {
+        /** @var Exception $exception */
+        $exception = $context['exception'];
+        unset($context['exception']);
         return [
-            'trace' => $context['exception']->getTraceAsString(),
+            ...$context,
+            'message' => $exception->getMessage(),
+            'file' => $exception->getFile() . ':' . $exception->getLine(),
+            'trace' => $exception->getTraceAsString(),
         ];
     }
 
