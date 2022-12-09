@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Vmorozov\LaravelRichLogs\Logs\FluentLogManager;
 use Vmorozov\LaravelRichLogs\Queue\MakeQueueTraceAwareAction;
 use Vmorozov\LaravelRichLogs\Tracing\TraceIdGenerator;
 use Vmorozov\LaravelRichLogs\Tracing\TraceIdStorage;
+use Psr\Log\LoggerInterface;
 
 class LaravelRichLogsServiceProvider extends PackageServiceProvider
 {
@@ -59,6 +61,22 @@ class LaravelRichLogsServiceProvider extends PackageServiceProvider
                     'connection' => $query->connectionName,
                 ]
             );
+        });
+
+        $this->registerLogDriver();
+    }
+
+    private function registerLogDriver()
+    {
+        $log = $this->app->make(LoggerInterface::class);
+        $log->extend('fluentd', function ($app, array $config) {
+            $manager = $app->make(FluentLogManager::class);
+
+            return $manager($config);
+        });
+
+        $this->app->singleton(FluentLogManager::class, function ($app) {
+            return new FluentLogManager($app);
         });
     }
 }
