@@ -1,6 +1,6 @@
 <?php
 
-namespace Vmorozov\LaravelRichLogs\Middleware;
+namespace Vmorozov\LaravelFluentdLogger\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;

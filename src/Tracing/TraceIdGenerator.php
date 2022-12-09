@@ -1,6 +1,6 @@
 <?php
 
-namespace Vmorozov\LaravelRichLogs\Tracing;
+namespace Vmorozov\LaravelFluentdLogger\Tracing;
 
 use Throwable;
 

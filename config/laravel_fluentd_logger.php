@@ -13,7 +13,7 @@ return [
     // specified class name
     'packer' => null,
 
-    // optionally override \Vmorozov\LaravelRichLogs\Logs\FluentHandler class to customize behaviour
+    // optionally override \Vmorozov\LaravelFluentdLogger\Logs\FluentHandler class to customize behaviour
     'handler' => null,
 
     'processors' => [],

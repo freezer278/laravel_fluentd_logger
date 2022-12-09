@@ -1,6 +1,6 @@
 <?php
 
-namespace Vmorozov\LaravelRichLogs;
+namespace Vmorozov\LaravelFluentdLogger;
 
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\DB;
@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Vmorozov\LaravelRichLogs\Logs\FluentLogManager;
-use Vmorozov\LaravelRichLogs\Queue\MakeQueueTraceAwareAction;
-use Vmorozov\LaravelRichLogs\Tracing\TraceIdGenerator;
-use Vmorozov\LaravelRichLogs\Tracing\TraceIdStorage;
+use Vmorozov\LaravelFluentdLogger\Logs\FluentLogManager;
+use Vmorozov\LaravelFluentdLogger\Queue\MakeQueueTraceAwareAction;
+use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdGenerator;
+use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdStorage;
 use Psr\Log\LoggerInterface;
 
 class LaravelRichLogsServiceProvider extends PackageServiceProvider
@@ -24,7 +24,7 @@ class LaravelRichLogsServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package
-            ->name('laravel_rich_logs')
+            ->name('laravel_fluentd_logger')
             ->hasConfigFile();
     }
 

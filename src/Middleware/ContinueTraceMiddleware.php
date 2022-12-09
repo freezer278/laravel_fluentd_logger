@@ -1,11 +1,11 @@
 <?php
 
-namespace Vmorozov\LaravelRichLogs\Middleware;
+namespace Vmorozov\LaravelFluentdLogger\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Vmorozov\LaravelRichLogs\Tracing\ParsedTraceParentHeaderValue;
-use Vmorozov\LaravelRichLogs\Tracing\TraceIdStorage;
+use Vmorozov\LaravelFluentdLogger\Tracing\ParsedTraceParentHeaderValue;
+use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdStorage;
 
 class ContinueTraceMiddleware
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Vmorozov\LaravelRichLogs\Logs;
+namespace Vmorozov\LaravelFluentdLogger\Logs;
 
 use Exception;
 use Fluent\Logger\LoggerInterface;
@@ -9,7 +9,7 @@ use Illuminate\Contracts\Foundation\Application;
 use LogicException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
-use Vmorozov\LaravelRichLogs\Tracing\TraceIdStorage;
+use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdStorage;
 use function array_key_exists;
 use function is_array;
 use function preg_match_all;

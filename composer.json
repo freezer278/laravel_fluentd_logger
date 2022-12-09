@@ -1,5 +1,5 @@
 {
-    "name": "vmorozov/laravel_rich_logs",
+    "name": "vmorozov/laravel_fluentd_logger",
     "description": ":package_description",
     "keywords": [
         "logs",
@@ -40,12 +40,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Vmorozov\\LaravelRichLogs\\": "src"
+            "Vmorozov\\LaravelFluentdLogger\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vmorozov\\LaravelRichLogs\\Tests\\": "tests"
+            "Vmorozov\\LaravelFluentdLogger\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -65,7 +65,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Vmorozov\\LaravelRichLogs\\LaravelRichLogsServiceProvider"
+                "Vmorozov\\LaravelFluentdLogger\\LaravelRichLogsServiceProvider"
             ]
         }
     },

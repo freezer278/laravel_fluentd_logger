@@ -1,10 +1,10 @@
 <?php
 
-namespace Vmorozov\LaravelRichLogs\Queue;
+namespace Vmorozov\LaravelFluentdLogger\Queue;
 
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
-use Vmorozov\LaravelRichLogs\Tracing\TraceIdStorage;
+use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdStorage;
 
 class MakeQueueTraceAwareAction
 {

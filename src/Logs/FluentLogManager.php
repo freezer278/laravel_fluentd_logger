@@ -1,6 +1,6 @@
 <?php
 
-namespace Vmorozov\LaravelRichLogs\Logs;
+namespace Vmorozov\LaravelFluentdLogger\Logs;
 
 use Fluent\Logger\FluentLogger;
 use Fluent\Logger\PackerInterface;
@@ -44,7 +44,7 @@ final class FluentLogManager extends LogManager
      */
     private function createFluentHandler(array $config): HandlerInterface
     {
-        $configure = $this->app->make('config')['laravel_rich_logs'];
+        $configure = $this->app->make('config')['laravel_fluentd_logger'];
         $fluentHandler = $this->detectHandler($configure);
 
         $handler = new $fluentHandler(
