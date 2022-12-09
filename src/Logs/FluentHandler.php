@@ -23,11 +23,11 @@ use function str_replace;
  */
 class FluentHandler extends AbstractProcessingHandler
 {
-    /** @var LoggerInterface */
-    protected $logger;
+    protected LoggerInterface $logger;
+    private Repository $config;
+    private TraceIdStorage $traceIdStorage;
 
-    /** @var string */
-    protected $tagFormat = '{{app_name}}.{{level_name}}';
+    protected string $tagFormat = '{{app_name}}.{{level_name}}';
 
     /**
      * @param LoggerInterface $logger
@@ -64,6 +64,7 @@ class FluentHandler extends AbstractProcessingHandler
             $tag,
             [
                 '@trace_id' => $this->traceIdStorage->getTraceId(),
+                '@span_id' => $this->traceIdStorage->getSpanId(),
                 '@level' => $record['level_name'],
                 '@env' => $record['channel'],
                 '@message' => $record['message'],
@@ -137,10 +138,10 @@ class FluentHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Returns the entire exception trace as a string
+     * Returns the entire exception trace as array
      *
      * @param array<string, mixed> $context
-     * @return string
+     * @return array
      */
     protected function getContextExceptionTrace(array $context): array
     {

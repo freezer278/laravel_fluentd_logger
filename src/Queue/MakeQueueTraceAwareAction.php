@@ -4,6 +4,7 @@ namespace Vmorozov\LaravelFluentdLogger\Queue;
 
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
+use Vmorozov\LaravelFluentdLogger\Tracing\RandomIdGenerator;
 use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdStorage;
 
 class MakeQueueTraceAwareAction
@@ -28,7 +29,9 @@ class MakeQueueTraceAwareAction
         app('queue')->createPayloadUsing(function ($connectionName, $queue, $payload) {
             $currentTraceId = $this->traceIdStorage->getTraceId();
             if ($currentTraceId) {
-                return ['traceId' => $currentTraceId];
+                return [
+                    'traceId' => $currentTraceId
+                ];
             }
         });
 
@@ -43,6 +46,7 @@ class MakeQueueTraceAwareAction
             }
 
             $this->traceIdStorage->setTraceId($event->job->payload()['traceId']);
+            $this->traceIdStorage->startNewSpan();
         });
 
         return $this;
@@ -56,6 +60,7 @@ class MakeQueueTraceAwareAction
             }
 
             $this->traceIdStorage->setTraceId($event->payload()['traceId']);
+            $this->traceIdStorage->startNewSpan();
         });
 
         return $this;

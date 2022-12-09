@@ -29,13 +29,15 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
         $this->registerLogDriver();
     }
 
-    private function initTracing()
+    private function initTracing(): void
     {
-        $traceId = (new RandomIdGenerator())->generateTraceId();
-
+//        $this->app->singleton(TraceIdStorage::class, function () {
+//            return new TraceIdStorage($this->app->make(RandomIdGenerator::class));
+//        });
         /** @var TraceIdStorage $traceIdStorage */
         $traceIdStorage = $this->app->make(TraceIdStorage::class);
-        $traceIdStorage->setTraceId($traceId);
+        $traceIdStorage->startNewTrace();
+        $traceIdStorage->startNewSpan();
 
         /** @var MakeQueueTraceAwareAction $action */
         $action = $this->app->make(MakeQueueTraceAwareAction::class);
@@ -45,7 +47,7 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
         $this->initDbQueryLog();
     }
 
-    private function initQueueJobsFailsLog()
+    private function initQueueJobsFailsLog(): void
     {
         Queue::failing(function (JobFailed $event) {
             Log::error('Failed Job | ' . $event->job->resolveName(), [
@@ -74,7 +76,7 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
         });
     }
 
-    private function registerLogDriver()
+    private function registerLogDriver(): void
     {
         $log = $this->app->make(LoggerInterface::class);
         $log->extend('fluentd', function ($app, array $config) {
