@@ -142,9 +142,11 @@ class FluentHandler extends AbstractProcessingHandler
 
      * @return string
      */
-    protected function getContextExceptionTrace(array $context): string
+    protected function getContextExceptionTrace(array $context): array
     {
-        return $context['exception']->getTraceAsString();
+        return [
+            'trace' => $context['exception']->getTraceAsString(),
+        ];
     }
 
     /**

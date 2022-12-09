@@ -16,7 +16,7 @@ class TraceIdGenerator
             $traceId = $this->randomHex(self::TRACE_ID_HEX_LENGTH);
         } while (! $this->isValidTraceId($traceId));
 
-        return $traceId.'.'.time();
+        return $traceId;
     }
 
     private function randomHex(int $hexLength): string
