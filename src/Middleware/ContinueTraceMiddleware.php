@@ -17,15 +17,15 @@ class ContinueTraceMiddleware
     }
 
     /**
-     * @param Request $request
-     * @param Closure $next
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         $traceId = $this->getTraceIdFromGetParams($request) ?? $this->getTraceIdFromTraceparentHeader($request);
 
-        if (!$traceId) {
+        if (! $traceId) {
             return $next($request);
         }
 
@@ -35,7 +35,7 @@ class ContinueTraceMiddleware
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      */
     private function getTraceIdFromGetParams($request): ?string
     {
@@ -43,15 +43,15 @@ class ContinueTraceMiddleware
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      */
     private function getTraceIdFromTraceparentHeader($request): ?string
     {
-        if (!$request->hasHeader('traceparent')) {
+        if (! $request->hasHeader('traceparent')) {
             return null;
         }
 
-        if (!$parsedHeader = ParsedTraceParentHeaderValue::make($request->header('traceparent'))) {
+        if (! $parsedHeader = ParsedTraceParentHeaderValue::make($request->header('traceparent'))) {
             return null;
         }
 

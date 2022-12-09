@@ -7,15 +7,16 @@ use Throwable;
 class TraceIdGenerator
 {
     private const TRACE_ID_HEX_LENGTH = 32;
+
     public const INVALID_TRACE = '00000000000000000000000000000000';
 
     public function generateTraceId(): string
     {
         do {
             $traceId = $this->randomHex(self::TRACE_ID_HEX_LENGTH);
-        } while (!$this->isValidTraceId($traceId));
+        } while (! $this->isValidTraceId($traceId));
 
-        return $traceId . '.' . time() ;
+        return $traceId.'.'.time();
     }
 
     private function randomHex(int $hexLength): string

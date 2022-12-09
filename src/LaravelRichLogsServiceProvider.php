@@ -43,13 +43,13 @@ class LaravelRichLogsServiceProvider extends PackageServiceProvider
                 'connection_name' => $event->connectionName,
                 'queue' => $event->job->getQueue(),
                 'job_name' => $event->job->getName(),
-//                'job_payload' => $event->job->getRawBody(),
-                'file' => $event->exception->getFile() . ':' . $event->exception->getLine(),
+                //                'job_payload' => $event->job->getRawBody(),
+                'file' => $event->exception->getFile().':'.$event->exception->getLine(),
                 'exception_trace' => $event->exception->getTraceAsString(),
             ]);
         });
 
-        DB::listen(function($query) {
+        DB::listen(function ($query) {
             Log::info(
                 'DB Query',
                 [
