@@ -10,7 +10,7 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Vmorozov\LaravelFluentdLogger\Logs\FluentLogManager;
 use Vmorozov\LaravelFluentdLogger\Queue\MakeQueueTraceAwareAction;
-use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdGenerator;
+use Vmorozov\LaravelFluentdLogger\Tracing\RandomIdGenerator;
 use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdStorage;
 use Psr\Log\LoggerInterface;
 
@@ -31,7 +31,7 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
 
     private function initTracing()
     {
-        $traceId = (new TraceIdGenerator())->generateTraceId();
+        $traceId = (new RandomIdGenerator())->generateTraceId();
 
         /** @var TraceIdStorage $traceIdStorage */
         $traceIdStorage = $this->app->make(TraceIdStorage::class);
