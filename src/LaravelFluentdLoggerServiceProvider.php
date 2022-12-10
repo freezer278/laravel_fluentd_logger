@@ -98,7 +98,7 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
                     'query' => $query->sql,
 // commented because there are elasticsearch problems with mapping some kinds of content inside bindings
 //                    'bindings' => $query->bindings,
-                    'time' => $query->time,
+                    'time_ms' => $query->time,
                     'connection' => $query->connectionName,
                 ]
             );

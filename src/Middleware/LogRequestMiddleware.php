@@ -35,18 +35,8 @@ class LogRequestMiddleware
         return [
             'url' => $request->fullUrl(),
             'method' => $request->method(),
-            'headers' => $this->getHeadersToLog($request),
             'request' => $request->all(),
-            'duration_seconds' => microtime(true) - LARAVEL_START,
+            'duration_ms' => (microtime(true) - LARAVEL_START) * 1000,
         ];
-    }
-
-    private function getHeadersToLog($request): array
-    {
-        $headers = $request->headers->all();
-
-        unset($headers['cookie'], $headers['authorization']);
-
-        return $headers;
     }
 }
