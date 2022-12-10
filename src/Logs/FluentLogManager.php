@@ -2,7 +2,6 @@
 
 namespace Vmorozov\LaravelFluentdLogger\Logs;
 
-use Fluent\Logger\FluentLogger;
 use Fluent\Logger\PackerInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Container\Container;
@@ -11,6 +10,7 @@ use Monolog\Handler\HandlerInterface;
 use Monolog\Logger as Monolog;
 use Psr\Log\LoggerInterface;
 
+use Vmorozov\LaravelFluentdLogger\Logs\Fluentd\FluentLogger;
 use function class_exists;
 use function is_null;
 use function strval;
