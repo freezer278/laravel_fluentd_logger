@@ -42,8 +42,15 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
         $action = $this->app->make(MakeQueueTraceAwareAction::class);
         $action->execute();
 
-        $this->initQueueJobsLog();
-        $this->initDbQueryLog();
+        $config = config('laravel_fluentd_logger');
+
+        if ($config['features_enabled']['db_query_log'] ?? true) {
+            $this->initDbQueryLog();
+        }
+
+        if ($config['features_enabled']['queue_log'] ?? true) {
+            $this->initQueueJobsLog();
+        }
     }
 
     private function initQueueJobsLog(): void

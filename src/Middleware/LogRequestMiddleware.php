@@ -27,6 +27,10 @@ class LogRequestMiddleware
 
     private function logRequest($request, $response): void
     {
+        if (!config('laravel_fluentd_logger.features_enabled.request_log', true)) {
+            return;
+        }
+
         Log::info('Request log', $this->createLogContext($request, $response));
     }
 

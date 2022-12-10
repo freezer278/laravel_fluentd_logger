@@ -52,6 +52,37 @@ FLUENTD_HOST=127.0.0.1
 FLUENTD_PORT=24224
 ```
 
+## Configuration
+
+In config file `laravel_fluentd_logger.php` you can make some adjustments:
+
+- Disable some features
+```php
+    'features_enabled' => [
+        'request_log' => false,
+        'db_query_log' => false,
+        'queue_log' => false,
+    ],
+```
+- Overwrite default fluentd log handler
+```php
+    // optionally override \Vmorozov\LaravelFluentdLogger\Logs\FluentHandler class to customize behaviour
+    'handler' => SomeCustomHandler::class,
+```
+- Change log tag format
+```php
+'tagFormat' => '{{app_name}}.{{level_name}}',
+```
+- Overwrite some options for fluentd sdk classes
+```php
+    /** @see https://github.com/fluent/fluent-logger-php/blob/master/src/FluentLogger.php */
+    'options' => [],
+
+    /** @see https://github.com/fluent/fluent-logger-php/blob/master/src/PackerInterface.php */
+    // specified class name
+    'packer' => null,
+```
+
 ## Testing
 
 ```bash
