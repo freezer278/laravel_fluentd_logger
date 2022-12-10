@@ -4,14 +4,13 @@ namespace Vmorozov\LaravelFluentdLogger\Queue;
 
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
-use Vmorozov\LaravelFluentdLogger\Tracing\RandomIdGenerator;
-use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdStorage;
+use Vmorozov\LaravelFluentdLogger\Tracing\TraceStorage;
 
 class MakeQueueTraceAwareAction
 {
-    private TraceIdStorage $traceIdStorage;
+    private TraceStorage $traceIdStorage;
 
-    public function __construct(TraceIdStorage $traceIdStorage)
+    public function __construct(TraceStorage $traceIdStorage)
     {
         $this->traceIdStorage = $traceIdStorage;
     }

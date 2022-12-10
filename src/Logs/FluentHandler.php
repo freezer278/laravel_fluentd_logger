@@ -9,7 +9,7 @@ use Illuminate\Contracts\Foundation\Application;
 use LogicException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
-use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdStorage;
+use Vmorozov\LaravelFluentdLogger\Tracing\TraceStorage;
 use function array_key_exists;
 use function is_array;
 use function preg_match_all;
@@ -25,7 +25,7 @@ class FluentHandler extends AbstractProcessingHandler
 {
     protected LoggerInterface $logger;
     private Repository $config;
-    private TraceIdStorage $traceIdStorage;
+    private TraceStorage $traceStorage;
 
     protected string $tagFormat = '{{app_name}}.{{level_name}}';
 
@@ -50,7 +50,7 @@ class FluentHandler extends AbstractProcessingHandler
             $this->tagFormat = $tagFormat;
         }
         $this->config = $application->make(Repository::class);
-        $this->traceIdStorage = $application->make(TraceIdStorage::class);
+        $this->traceStorage = $application->make(TraceStorage::class);
         parent::__construct($level, $bubble);
     }
 
@@ -63,8 +63,8 @@ class FluentHandler extends AbstractProcessingHandler
         $this->logger->post(
             $tag,
             [
-                '@trace_id' => $this->traceIdStorage->getTraceId(),
-                '@span_id' => $this->traceIdStorage->getSpanId(),
+                '@trace_id' => $this->traceStorage->getTraceId(),
+                '@span_id' => $this->traceStorage->getSpanId(),
                 '@level' => $record['level_name'],
                 '@env' => $record['channel'],
                 '@message' => $record['message'],

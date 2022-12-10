@@ -2,7 +2,7 @@
 
 namespace Vmorozov\LaravelFluentdLogger\Tracing;
 
-class TraceIdStorage
+class TraceStorage
 {
     private RandomIdGenerator $randomIdGenerator;
 

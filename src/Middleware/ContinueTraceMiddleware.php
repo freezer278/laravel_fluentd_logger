@@ -5,15 +5,15 @@ namespace Vmorozov\LaravelFluentdLogger\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Vmorozov\LaravelFluentdLogger\Tracing\ParsedTraceParentHeaderValue;
-use Vmorozov\LaravelFluentdLogger\Tracing\TraceIdStorage;
+use Vmorozov\LaravelFluentdLogger\Tracing\TraceStorage;
 
 class ContinueTraceMiddleware
 {
-    private TraceIdStorage $traceIdStorage;
+    private TraceStorage $traceStorage;
 
-    public function __construct(TraceIdStorage $traceIdStorage)
+    public function __construct(TraceStorage $traceIdStorage)
     {
-        $this->traceIdStorage = $traceIdStorage;
+        $this->traceStorage = $traceIdStorage;
     }
 
     /**
@@ -29,7 +29,7 @@ class ContinueTraceMiddleware
             return $next($request);
         }
 
-        $this->traceIdStorage->setTraceId($traceId);
+        $this->traceStorage->setTraceId($traceId);
 
         return $next($request);
     }
