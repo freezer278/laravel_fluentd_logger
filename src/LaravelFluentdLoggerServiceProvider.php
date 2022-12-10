@@ -57,7 +57,7 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
 
         Queue::before(function (JobProcessing $event) {
             Log::info(
-                'Job Started | ' . $event->job->getName(),
+                'Job Started | ' . $event->job->resolveName(),
                 $this->getLogContextForJob($event->job, $event->connectionName)
             );
         });
@@ -67,7 +67,7 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
                 return;
             }
             Log::info(
-                'Job Finished | ' . $event->job->getName(),
+                'Job Finished | ' . $event->job->resolveName(),
                 $this->getLogContextForJob($event->job, $event->connectionName)
             );
         });
