@@ -2,11 +2,13 @@
 
 namespace Vmorozov\LaravelFluentdLogger;
 
+use Illuminate\Console\Events\CommandFinished;
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Spatie\LaravelPackageTools\Package;
@@ -50,6 +52,10 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
 
         if ($config['features_enabled']['queue_log'] ?? true) {
             $this->initQueueJobsLog();
+        }
+
+        if ($config['features_enabled']['console_commands_log'] ?? true) {
+            $this->initConsoleCommandsLog();
         }
     }
 
@@ -123,6 +129,40 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
 
         $this->app->singleton(FluentLogManager::class, function ($app) {
             return new FluentLogManager($app);
+        });
+    }
+
+    private function initConsoleCommandsLog(): void
+    {
+        if (!$this->app->runningInConsole()) {
+            return;
+        }
+
+        $excludedCommands = config('laravel_fluentd_logger.console_commands_log.excluded', []);
+
+        Event::listen(CommandFinished::class, function (CommandFinished $event) use ($excludedCommands) {
+            $signature = $event->command;
+
+            if (!$signature || in_array($signature, $excludedCommands)) {
+                return;
+            }
+
+            $timeFinished = microtime(true);
+
+            $executionTime = defined('LARAVEL_START') ?
+                $timeFinished - LARAVEL_START :
+                0;
+            $executionTime = round($executionTime * 1000);
+
+            $memoryPeak = memory_get_peak_usage(true) / 1048576;
+
+            Log::info('Console command executed: ' . $signature, [
+                'signature' => $signature,
+                'execution_time_ms' => $executionTime,
+                'peak_memory_usage' => $memoryPeak,
+                'input' => $event->input->getArguments(),
+                'exit_code' => $event->exitCode,
+            ]);
         });
     }
 }

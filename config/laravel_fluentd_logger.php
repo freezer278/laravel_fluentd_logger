@@ -27,5 +27,12 @@ return [
         'request_log' => true,
         'db_query_log' => true,
         'queue_log' => true,
+        'console_commands_log' => true,
+    ],
+
+    'console_commands_log' => [
+        'excluded' => [
+//            'migrate'
+        ],
     ],
 ];

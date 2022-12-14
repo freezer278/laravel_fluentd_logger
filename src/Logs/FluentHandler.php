@@ -70,6 +70,7 @@ class FluentHandler extends AbstractProcessingHandler
                 '@message' => $record['message'],
                 '@context' => $this->getContext($record['context']),
                 '@extra' => $record['extra'],
+                '@host' => (string)gethostname(),
             ]
         );
     }
