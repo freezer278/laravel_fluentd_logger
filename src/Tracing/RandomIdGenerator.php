@@ -6,13 +6,13 @@ use Throwable;
 
 class RandomIdGenerator
 {
-    private const TRACE_ID_HEX_LENGTH = 32;
-    private const SPAN_ID_HEX_LENGTH = 16;
+    public const TRACE_ID_LENGTH = 32;
+    public const SPAN_ID_LENGTH = 16;
 
     public function generateTraceId(): string
     {
         do {
-            $traceId = $this->randomHex(self::TRACE_ID_HEX_LENGTH);
+            $traceId = $this->randomHex(self::TRACE_ID_LENGTH);
         } while (!$this->isValidTraceId($traceId));
 
         return $traceId;
@@ -21,7 +21,7 @@ class RandomIdGenerator
     public function generateSpanId(): string
     {
         do {
-            $spanId = $this->randomHex(self::SPAN_ID_HEX_LENGTH);
+            $spanId = $this->randomHex(self::SPAN_ID_LENGTH);
         } while (!$this->isValidSpanId($spanId));
 
         return $spanId;
@@ -46,12 +46,12 @@ class RandomIdGenerator
 
     private function isValidTraceId($traceId): bool
     {
-        return $this->isValidId($traceId, self::TRACE_ID_HEX_LENGTH);
+        return $this->isValidId($traceId, self::TRACE_ID_LENGTH);
     }
 
     private function isValidSpanId($spanId): bool
     {
-        return $this->isValidId($spanId, self::SPAN_ID_HEX_LENGTH);
+        return $this->isValidId($spanId, self::SPAN_ID_LENGTH);
     }
 
     private function isValidId($id, int $length): bool

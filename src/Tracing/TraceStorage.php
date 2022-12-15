@@ -6,12 +6,14 @@ class TraceStorage
 {
     private RandomIdGenerator $randomIdGenerator;
 
-    private static string $traceId;
-    private static string $spanId;
+    private string $traceId;
+    private string $spanId;
 
     public function __construct(RandomIdGenerator $randomIdGenerator)
     {
         $this->randomIdGenerator = $randomIdGenerator;
+        $this->startNewTrace();
+        $this->startNewSpan();
     }
 
     public function startNewTrace(): string
@@ -22,31 +24,27 @@ class TraceStorage
 
     public function getTraceId(): string
     {
-        return static::$traceId;
+        return $this->traceId;
     }
 
     public function setTraceId(string $traceId): void
     {
-        static::$traceId = $traceId;
+        $this->traceId = $traceId;
     }
 
     public function startNewSpan(): string
     {
-        if (!$this->getTraceId()) {
-            throw new \LogicException('Span can only be started after trace start.');
-        }
-
         $this->setSpanId($this->randomIdGenerator->generateSpanId());
         return $this->getSpanId();
     }
 
     public function getSpanId(): string
     {
-        return static::$spanId;
+        return $this->spanId;
     }
 
     public function setSpanId(string $spanId): void
     {
-        static::$spanId = $spanId;
+        $this->spanId = $spanId;
     }
 }
