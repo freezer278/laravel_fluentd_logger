@@ -15,6 +15,7 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Vmorozov\LaravelFluentdLogger\Logs\FluentLogManager;
 use Vmorozov\LaravelFluentdLogger\Queue\MakeQueueTraceAwareAction;
+use Vmorozov\LaravelFluentdLogger\Tracing\RandomIdGenerator;
 use Vmorozov\LaravelFluentdLogger\Tracing\TraceStorage;
 use Psr\Log\LoggerInterface;
 
@@ -31,19 +32,23 @@ class LaravelFluentdLoggerServiceProvider extends PackageServiceProvider
     {
         $this->initTracing();
         $this->registerLogDriver();
+        $this->initLogFeatures();
     }
 
     private function initTracing(): void
     {
-        /** @var TraceStorage $traceStorage */
-        $traceStorage = $this->app->make(TraceStorage::class);
-        $traceStorage->startNewTrace();
-        $traceStorage->startNewSpan();
+        $this->app->singleton(TraceStorage::class, function () {
+            return new TraceStorage($this->app->make(RandomIdGenerator::class));
+        });
+        $this->app->make(TraceStorage::class);
 
         /** @var MakeQueueTraceAwareAction $action */
         $action = $this->app->make(MakeQueueTraceAwareAction::class);
         $action->execute();
+    }
 
+    private function initLogFeatures(): void
+    {
         $config = config('laravel_fluentd_logger');
 
         if ($config['features_enabled']['db_query_log'] ?? true) {
