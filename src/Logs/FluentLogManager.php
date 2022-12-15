@@ -5,6 +5,7 @@ namespace Vmorozov\LaravelFluentdLogger\Logs;
 use Fluent\Logger\PackerInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Log\LogManager;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger as Monolog;
@@ -20,7 +21,7 @@ use function strval;
  */
 final class FluentLogManager extends LogManager
 {
-    /** @var Container */
+    /** @var Application */
     protected $app;
 
     /**
