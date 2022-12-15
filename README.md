@@ -83,6 +83,70 @@ In config file `laravel_fluentd_logger.php` you can make some adjustments:
     'packer' => null,
 ```
 
+### Fluentd config samples
+- simple stdout output:
+```
+<match your_app_name_from_env.**>
+  type stdout
+</match>
+```
+- output to elasticsearch + stdout:
+```
+# sendlog to the elasticsearch
+# the host must match to the elasticsearch
+# container service
+<match your_app_name_from_env.**>
+  @type copy
+  <store>
+    @type elasticsearch
+    host elasticsearch
+    port 9200
+    logstash_format true
+    logstash_prefix fluentd
+    logstash_dateformat %Y-%m-%d
+    include_tag_key true
+    type_name access_log
+    tag_key @log_name
+    flush_interval 1s
+    log_es_400_reason false
+  </store>
+  <store>
+    @type stdout
+  </store>
+</match>
+```
+- config for fluentd to accept data using port:
+```
+# bind fluentd on IP 0.0.0.0
+# port 24224
+<source>
+  @type forward
+  port 24224
+  bind 0.0.0.0
+</source>
+```
+
+More info about fluentd configuration can be found in [official fluentd documentation](https://docs.fluentd.org/).
+
+### Monolog processors
+
+You can add processors to the monolog handlers by adding them to the `processors` array within the `laravel_fluentd_logger.php` config.
+config/laravel_fluentd_logger.php:
+```php
+'processors' => [CustomProcessor::class],
+```
+CustomProcessor.php:
+```php
+class CustomProcessor
+{
+    public function __invoke($record)
+    {
+        $record['extra']['level'] = $record['level_name'];
+        return $record;
+    }
+}
+```
+
 ## Testing
 
 ```bash
